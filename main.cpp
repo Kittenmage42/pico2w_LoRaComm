@@ -151,7 +151,7 @@ int main() {
         snprintf(buf, sizeof(buf), "%u", (uint8_t)selected_char);
         
         ssd1306_draw_string(&disp, 0, 0, 1, buf);
-        ssd1306_draw_string(&disp, 0, 24, 1, msg_buffer.data());
+        ssd1306_draw_string(&disp, 128 - cur_pos * 6, 24, 1, msg_buffer.data());
         
         
         ssd1306_show(&disp);
@@ -162,7 +162,12 @@ int main() {
             if (!SW_held){
                 cyw43_arch_gpio_put(LED_PIN, 1);
                 
-                if (cur_pos + 1 < msg_buffer.size()) {
+                if (selected_char == 8) {
+                    if (cur_pos != 0) {
+                        msg_buffer[cur_pos] = '\0';
+                        msg_buffer[--cur_pos] = '\0';
+                    }
+                } else if (cur_pos + 1 < msg_buffer.size()) {
                     msg_buffer[cur_pos++] = selected_char;
                     msg_buffer[cur_pos] = '\0';
                 }
