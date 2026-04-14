@@ -3,7 +3,7 @@
  Dieses Projekt wurde für den Raspberry Pi Pico 2 W geschrieben, unter verwendung des Raspberry Pi Pico C/C++ SDKs und der ssd1306 bibliothek von David Schramm (https://github.com/daschr/pico-ssd1306)
  
  Dieses Projekt benötigt einen Raspberry Pi Pico 2 W, ein ssd1306 oled Display (128x64 pixel), einen Rotary Encoder sowie einen Knopf (optional, aber empfehlenswert wenn man keine Kabel per Hand verbinden will), ein Breadboard ist zu empfehlen, ich habe 13 Jumper-Kabel verwendet (7 MF), 6 MM)
- Link zum Verkabelungsdiagramm: https://wokwi.com/projects/461181496055270401
+ Link zum Verkabelungsdiagramm: https://wokwi.com/projects/461266821758218241
  Zudem befindet sich eine kopie von diagram.json in diesem ordner
 
 */
