@@ -13,3 +13,5 @@ Dieses Projekt verwendet ein ssd1306 OLED dieplay, einen Knopf und einen Rotary 
         cmake ..
         make # -j anhängen für einen schnelleren build (nutzt dann alle Prozessorkerne)
     nachdem diese Schritte abgeschlossen sind, befindet sich im build ordner eine Datei namens "pico2w_LoRaComm.uf2". Diese Datei muss man nur noch auf den pico Kopieren. Ein Pico 2 W sollte vorzugsweise verwendet werden, für einen Normalen Pico müsste die Funktionsweise der Internen LED umgeschrieben werden.
+    Um dieses Projekt zu bauen muss zuerst natürlich das Pico C/C++ SDK korrekt eingerichtet werden. Dafür sollte eine andere Anleitung konsultiert werden. 
+    Danach können die oben genannten Schritte ausgeführt werden. 
