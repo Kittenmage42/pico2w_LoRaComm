@@ -8,7 +8,7 @@
 
 */
 
-
+// If this is on github I have succeded in getting it to work in xcode
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
