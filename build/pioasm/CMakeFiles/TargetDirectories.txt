@@ -1,0 +1,7 @@
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/pioasm.dir
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/edit_cache.dir
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/rebuild_cache.dir
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/list_install_components.dir
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/install.dir
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/install/local.dir
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm/CMakeFiles/install/strip.dir

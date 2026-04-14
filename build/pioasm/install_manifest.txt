@@ -1,0 +1,5 @@
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm-install/pioasm/pioasm
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm-install/pioasm/pioasmTargets.cmake
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm-install/pioasm/pioasmTargets-release.cmake
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm-install/pioasm/pioasmConfig.cmake
+/Users/oswin/pico/projects/pico2w_LoRaComm/build/pioasm-install/pioasm/pioasmConfigVersion.cmake
