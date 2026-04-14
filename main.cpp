@@ -20,6 +20,7 @@ extern "C" {
 }
 #include "valley.h"
 #include "desc.h"
+#include "font2.h"
 
 // MARK: - Pin defines
 #define PIN_CLK 14 // CLK Pin am Rotary Encoder - wichtig für funktion des Rotary Encoders
@@ -144,7 +145,22 @@ int main() {
         // MARK: - Display code (Grafik)
         ssd1306_clear(&disp);
         for (int8_t i = -4; i <= 4; i++) {
-            ssd1306_draw_string(&disp, 58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)), (i==0) ? 42 : 48, (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1 , desc[((selected_char + i) % 256 + 256) % 256]); // Dieses Monster von Code rendert einfach nur 9 Strings mit ein paar Spezialeffekten | вєωαяє, ι αм ƒαη¢у!
+            if ( ( (selected_char + i) % 256 + 256) % 256 < 128){
+                ssd1306_draw_string_with_font(&disp,
+                                              58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)),
+                                              (i==0) ? 42 : 48,
+                                              (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1,
+                                              font2_8x5,
+                                              desc[((selected_char + i) % 256 + 256) % 256]);
+            } else {
+                ssd1306_draw_char_with_font(&disp,
+                                              58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)),
+                                              (i==0) ? 42 : 48,
+                                              (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1,
+                                              font2_8x5,
+                                              ((selected_char + i) % 256 + 256) % 256);
+            }
+            // Dieses Monster von Code rendert einfach nur 9 Strings mit ein paar Spezialeffekten | вєωαяє, ι αм ƒαη¢у!
         }
         
         char buf[16];
@@ -162,7 +178,7 @@ int main() {
             if (!SW_held){
                 cyw43_arch_gpio_put(LED_PIN, 1);
                 
-                if (selected_char == 8) {
+                if (selected_char == 128) { // 128 neues Backspace
                     if (cur_pos != 0) {
                         msg_buffer[cur_pos] = '\0';
                         msg_buffer[--cur_pos] = '\0';
