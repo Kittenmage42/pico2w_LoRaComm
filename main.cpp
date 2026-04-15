@@ -75,6 +75,11 @@ int main() {
     const uint LED_PIN = CYW43_WL_GPIO_LED_PIN;
     cyw43_arch_gpio_put(LED_PIN, 0);
     
+    // UART Init
+    uart_init(uart0, 9600);
+    gpio_set_function(0, GPIO_FUNC_UART);
+    gpio_set_function(1, GPIO_FUNC_UART);
+    
     // Rotary Encoder Pins Initialisieren
     gpio_init(PIN_CLK);
     gpio_set_dir(PIN_CLK, GPIO_IN);
@@ -198,6 +203,8 @@ int main() {
             if (!B_held){
                 
                 printf("%s\n", msg_buffer.data());
+                uart_puts(uart0, msg_buffer.data());
+                uart_puts(uart0, "\n");
                 msg_buffer.fill(0);
                 cur_pos = 0;
                 
