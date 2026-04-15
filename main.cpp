@@ -66,7 +66,7 @@ int main() {
     
     stdio_init_all();
     sleep_ms(100);
-    printf("Program started");
+    printf("Program pico2w_LoRaComm started");
 
     if (cyw43_arch_init()) {
         printf("Wi-Fi init failed\n");
@@ -103,11 +103,29 @@ int main() {
     gpio_set_function(5, GPIO_FUNC_I2C); // SCL Pin
     gpio_pull_up(4);
     gpio_pull_up(5);
+    
+    // 2nd Display
+    i2c_init(i2c1, 400000);
+    gpio_set_function(2, GPIO_FUNC_I2C); // SDA Pin
+    gpio_set_function(3, GPIO_FUNC_I2C); // SCL Pin
+    gpio_pull_up(2);
+    gpio_pull_up(3);
 
-    // Display initialisieren
-    ssd1306_t disp;
-    disp.external_vcc = false;
-    ssd1306_init(&disp, 128, 64, 0x3C, i2c0);
+    
+    // Displays deklarieren
+    ssd1306_t disp1;
+    ssd1306_t disp2;
+    
+    // Display1 initialisieren
+    disp1.external_vcc = false;
+    ssd1306_init(&disp1, 128, 64, 0x3C, i2c0);
+    
+    // Display 2 initialisieren
+    disp2.external_vcc = false;
+    ssd1306_init(&disp2, 128, 64, 0x3C, i2c1);
+    
+    ssd1306_t* disp[2] = { &disp1, &disp2 }; // Pointer zu Displays
+    
     
     // Anfangszustand setzen
     last_state = (gpio_get(PIN_CLK) << 1) | gpio_get(PIN_DT);
@@ -124,15 +142,17 @@ int main() {
 
     
     // MARK: - Anfängliche Nachricht
-    ssd1306_clear(&disp);
-    ssd1306_bmp_show_image(&disp, valley, valley_len);
-    ssd1306_show(&disp);
+    for (size_t i = 0; i < 2; i++){
+        ssd1306_clear(disp[i]);
+        ssd1306_bmp_show_image(disp[i], valley, valley_len);
+        ssd1306_show(disp[i]);
+    }
     sleep_ms(1000);
-    ssd1306_draw_square(&disp, 12, 12, 104, 40);
-    ssd1306_clear_square(&disp, 13, 13, 102, 38);
-    ssd1306_draw_string(&disp, 16, 16, 2, "LoRaComm");
-    ssd1306_draw_string(&disp, 16, 32, 1, "by Kittenmage42");
-    ssd1306_show(&disp);
+    ssd1306_draw_square(disp[0], 12, 12, 104, 40);
+    ssd1306_clear_square(disp[0], 13, 13, 102, 38);
+    ssd1306_draw_string(disp[0], 16, 16, 2, "LoRaComm");
+    ssd1306_draw_string(disp[0], 16, 32, 1, "by Kittenmage42");
+    ssd1306_show(disp[0]);
     sleep_ms(3000);
     
     while (true) {
@@ -146,17 +166,17 @@ int main() {
         selected_char = static_cast<char>((-encoder_position/4) % 256);
         
         // MARK: - Display code (Grafik)
-        ssd1306_clear(&disp);
+        ssd1306_clear(disp[0]);
         for (int8_t i = -4; i <= 4; i++) {
             if ( ( (selected_char + i) % 256 + 256) % 256 < 128){
-                ssd1306_draw_string_with_font(&disp,
+                ssd1306_draw_string_with_font(disp[0],
                                               58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)),
                                               (i==0) ? 42 : 48,
                                               (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1,
                                               font2_8x5,
                                               desc[((selected_char + i) % 256 + 256) % 256]);
             } else {
-                ssd1306_draw_char_with_font(&disp,
+                ssd1306_draw_char_with_font(disp[0],
                                               58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)),
                                               (i==0) ? 42 : 48,
                                               (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1,
@@ -169,11 +189,11 @@ int main() {
         char buf[16];
         snprintf(buf, sizeof(buf), "%u", (uint8_t)selected_char);
         
-        ssd1306_draw_string(&disp, 0, 0, 1, buf);
-        ssd1306_draw_string(&disp, 128 - cur_pos * 6, 24, 1, msg_buffer.data());
+        ssd1306_draw_string(disp[0], 0, 0, 1, buf);
+        ssd1306_draw_string(disp[0], 128 - cur_pos * 6, 24, 1, msg_buffer.data());
         
         
-        ssd1306_show(&disp);
+        ssd1306_show(disp[0]);
         // MARK: Ende Grafik
         
         // MARK: - Zeichen in buffer schreiben
@@ -202,8 +222,8 @@ int main() {
         if (gpio_get(PIN_B) == 0) {
             if (!B_held){
                 
-                printf("%s\n", msg_buffer.data());
-                uart_puts(uart0, msg_buffer.data());
+                printf("%s\n", msg_buffer.data()); // Übertragung per USB
+                uart_puts(uart0, msg_buffer.data()); // Übertragung per UART
                 uart_puts(uart0, "\n");
                 msg_buffer.fill(0);
                 cur_pos = 0;
@@ -213,5 +233,7 @@ int main() {
         } else {
             B_held = false;
         }
+        
+        // MARK: - Buffer Empfangen und Ausgeben
     }
 }
