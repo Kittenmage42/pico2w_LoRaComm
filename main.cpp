@@ -94,8 +94,8 @@ int main() {
 
     // I2C konfigurieren
     i2c_init(i2c0, 400000);
-    gpio_set_function(4, GPIO_FUNC_I2C); // SDA
-    gpio_set_function(5, GPIO_FUNC_I2C); // SCL
+    gpio_set_function(4, GPIO_FUNC_I2C); // SDA Pin
+    gpio_set_function(5, GPIO_FUNC_I2C); // SCL Pin
     gpio_pull_up(4);
     gpio_pull_up(5);
 
@@ -131,8 +131,6 @@ int main() {
     sleep_ms(3000);
     
     while (true) {
-        
-        
         
         // Encoder auslesen
         int32_t diff = encoder_position - last_encoder;
