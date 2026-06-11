@@ -15,6 +15,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <array>
+#include <string>
 extern "C" {
     #include "ssd1306.h"
 }
@@ -124,8 +125,7 @@ int main() {
     disp2.external_vcc = false;
     ssd1306_init(&disp2, 128, 64, 0x3C, i2c1);
     
-    ssd1306_t* disp[2] = { &disp1, &disp2 }; // Pointer zu Displays
-    
+    ssd1306_t* disps[2] = { &disp1, &disp2 }; // Pointer zu Displays
     
     // Anfangszustand setzen
     last_state = (gpio_get(PIN_CLK) << 1) | gpio_get(PIN_DT);
@@ -136,23 +136,22 @@ int main() {
     
     int32_t last_encoder = encoder_position;
     
+    std::string buffer;
     
     // MARK: - Programm Start -
     
-
-    
     // MARK: - Anfängliche Nachricht
     for (size_t i = 0; i < 2; i++){
-        ssd1306_clear(disp[i]);
-        ssd1306_bmp_show_image(disp[i], valley, valley_len);
-        ssd1306_show(disp[i]);
+        ssd1306_clear(disps[i]);
+        ssd1306_bmp_show_image(disps[i], valley, valley_len);
+        ssd1306_show(disps[i]);
     }
     sleep_ms(1000);
-    ssd1306_draw_square(disp[0], 12, 12, 104, 40);
-    ssd1306_clear_square(disp[0], 13, 13, 102, 38);
-    ssd1306_draw_string(disp[0], 16, 16, 2, "LoRaComm");
-    ssd1306_draw_string(disp[0], 16, 32, 1, "by Kittenmage42");
-    ssd1306_show(disp[0]);
+    ssd1306_draw_square(disps[0], 12, 12, 104, 40);
+    ssd1306_clear_square(disps[0], 13, 13, 102, 38);
+    ssd1306_draw_string(disps[0], 16, 16, 2, "LoRaComm");
+    ssd1306_draw_string(disps[0], 16, 32, 1, "by Kittenmage42");
+    ssd1306_show(disps[0]);
     sleep_ms(3000);
     
     while (true) {
@@ -166,17 +165,17 @@ int main() {
         selected_char = static_cast<char>((-encoder_position/4) % 256);
         
         // MARK: - Display code (Grafik)
-        ssd1306_clear(disp[0]);
+        ssd1306_clear(disps[0]);
         for (int8_t i = -4; i <= 4; i++) {
             if ( ( (selected_char + i) % 256 + 256) % 256 < 128){
-                ssd1306_draw_string_with_font(disp[0],
+                ssd1306_draw_string_with_font(disps[0],
                                               58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)),
                                               (i==0) ? 42 : 48,
                                               (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1,
                                               font2_8x5,
                                               desc[((selected_char + i) % 256 + 256) % 256]);
             } else {
-                ssd1306_draw_char_with_font(disp[0],
+                ssd1306_draw_char_with_font(disps[0],
                                               58 + (i * 24)  + 8 * ((i < 0) ? -1 : (i > 0 ? 1 : 0)),
                                               (i==0) ? 42 : 48,
                                               (selected_char < 127 && selected_char > 32) ? ((i == 0) ? 2 : 1) : 1,
@@ -189,11 +188,11 @@ int main() {
         char buf[16];
         snprintf(buf, sizeof(buf), "%u", (uint8_t)selected_char);
         
-        ssd1306_draw_string(disp[0], 0, 0, 1, buf);
-        ssd1306_draw_string(disp[0], 128 - cur_pos * 6, 24, 1, msg_buffer.data());
+        ssd1306_draw_string(disps[0], 0, 0, 1, buf);
+        ssd1306_draw_string(disps[0], 128 - cur_pos * 6, 24, 1, msg_buffer.data());
         
         
-        ssd1306_show(disp[0]);
+        ssd1306_show(disps[0]);
         // MARK: Ende Grafik
         
         // MARK: - Zeichen in buffer schreiben
@@ -235,5 +234,20 @@ int main() {
         }
         
         // MARK: - Buffer Empfangen und Ausgeben
+        
+        if (uart_is_readable(uart0)) {
+            char c = uart_getc(uart0);
+
+            if (c == '\n') {
+                // komplette Nachricht erhalten
+                printf("Empfangen: %s\n", buffer.c_str());
+                ssd1306_clear(disps[1]);
+                ssd1306_draw_string(disps[1], 0, 0, 1, buffer.c_str());
+                ssd1306_show(disps[1]);
+                buffer.clear();
+            } else {
+                buffer += c;
+            }
+        }
     }
 }
