@@ -1462,6 +1462,20 @@ CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_asy
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s"
 	/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c -o CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.s
 
+CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o: CMakeFiles/pico2w_LoRaComm.dir/flags.make
+CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o: /Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c
+CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o: CMakeFiles/pico2w_LoRaComm.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/oswin/pico/projects/pico2w_LoRaComm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building C object CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o"
+	/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o -MF CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o.d -o CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o -c /Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c
+
+CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i"
+	/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c > CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+
+CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s"
+	/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c -o CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+
 # Object files for target pico2w_LoRaComm
 pico2w_LoRaComm_OBJECTS = \
 "CMakeFiles/pico2w_LoRaComm.dir/main.cpp.o" \
@@ -1563,7 +1577,8 @@ pico2w_LoRaComm_OBJECTS = \
 "CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_exception/exception.c.o" \
 "CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o" \
 "CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o" \
-"CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o"
+"CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o" \
+"CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o"
 
 # External object files for target pico2w_LoRaComm
 pico2w_LoRaComm_EXTERNAL_OBJECTS =
@@ -1668,11 +1683,12 @@ pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/sr
 pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_cyw43_driver/cyw43_driver.c.o
 pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_threadsafe_background.c.o
 pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/pico_async_context/async_context_base.c.o
+pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o
 pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/build.make
 pico2w_LoRaComm.elf: pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_library.dir/bs2_default_padded_checksummed.S.o
 pico2w_LoRaComm.elf: /Users/oswin/pico/pico-sdk/src/rp2_common/pico_crt0/rp2350/memmap_default.ld
 pico2w_LoRaComm.elf: CMakeFiles/pico2w_LoRaComm.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/oswin/pico/projects/pico2w_LoRaComm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Linking CXX executable pico2w_LoRaComm.elf"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/oswin/pico/projects/pico2w_LoRaComm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Linking CXX executable pico2w_LoRaComm.elf"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/pico2w_LoRaComm.dir/link.txt --verbose=$(VERBOSE)
 	/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/bin/arm-none-eabi-objdump -h /Users/oswin/pico/projects/pico2w_LoRaComm/build/pico2w_LoRaComm.elf > pico2w_LoRaComm.dis
 	/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/bin/arm-none-eabi-objdump -d /Users/oswin/pico/projects/pico2w_LoRaComm/build/pico2w_LoRaComm.elf >> pico2w_LoRaComm.dis

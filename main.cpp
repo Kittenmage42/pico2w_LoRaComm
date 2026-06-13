@@ -9,9 +9,12 @@
 */
 
 // If this Comment is on github I have succeded in getting it to work in xcode
+
 #include <stdio.h>
+#include <cmath>
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
+#include "hardware/adc.h"
 #include <cstdio>
 #include <cstdlib>
 #include <array>
@@ -24,56 +27,77 @@ extern "C" {
 #include "font2.h"
 
 // MARK: - Pin defines
-#define PIN_CLK 14 // CLK Pin am Rotary Encoder - wichtig für funktion des Rotary Encoders
-#define PIN_DT  15 // DT  Pin am Rotary Encoder - wichtig für funktion des Rotary Encoders
-#define PIN_SW  16 // Knopf   am Rotary Encoder - zum auswählen des Zeichens
+#define LED_PIN CYW43_WL_GPIO_LED_PIN // statt: const uint LED_PIN = CYW43_WL_GPIO_LED_PIN; das weiter unten wäre
+//#define PIN_CLK 16 // CLK Pin am Rotary Encoder - wichtig für funktion des Rotary Encoders
+//#define PIN_DT  17 // DT  Pin am Rotary Encoder - wichtig für funktion des Rotary Encoders
+//#define PIN_SW  15 // Knopf   am Rotary Encoder - zum auswählen des Zeichens
 
-#define PIN_B   17 // Knopf zum senden des Buffers
+#define PIN_B   14 // Knopf zum senden des Buffers
 
-volatile int32_t encoder_position = 0;
-volatile uint8_t last_state = 0;
+#define JOYSTICK_X_CHANNEL 0 // GP26
+#define JOYSTICK_Y_CHANNEL 1 // GP27
+#define JOYSTICK_BTN_PIN 15
+
+//constexpr bool joystickmode = false; // unwichtig da rotary encoder rausgeschmissen wird (in favor of joysticks and potentiometers), daher default true
+
+//// Rotary Encoder Funktionen und code, [deprecated] (wird vieleicht noch mal eingebaut und dann wechselbar gemacht, verschwendet aktuell aber unnötig Ressourcen)
+//volatile int32_t encoder_position = 0;
+//volatile uint8_t last_state = 0;
+//
+//// Zustandsübergangstabelle (Gray Code Decoder)
+//const int8_t transition_table[16] = {
+//     0, -1,  1,  0,
+//     1,  0,  0, -1,
+//    -1,  0,  0,  1,
+//     0,  1, -1,  0
+//};
+//
+//void encoder_callback(uint gpio, uint32_t events) {
+//    uint8_t clk = gpio_get(PIN_CLK);
+//    uint8_t dt  = gpio_get(PIN_DT);
+//    
+//    uint8_t current_state = (clk << 1) | dt;
+//    uint8_t index = (last_state << 2) | current_state;
+//    
+//    encoder_position += transition_table[index];
+//    last_state = current_state;
+//}
 
 char selected_char = '0'; // The currently selected char for typing
-bool SW_held = false; // für nicht spam beim knopf-drücken
+bool BTN_held = false; // für nicht spam beim knopf-drücken
 bool B_held = false; // s.o.
+
+float joystick_deadzone = 0.08f;
 
 std::array<char, 128> msg_buffer{}; // Nachrichtenbuffer, 128 chars (MeSsaGe_BUFFER)
 size_t cur_pos = 0;                // Aktuelle Stelle in msg_buffer zum schreiben
 
-// Zustandsübergangstabelle (Gray Code Decoder)
-const int8_t transition_table[16] = {
-     0, -1,  1,  0,
-     1,  0,  0, -1,
-    -1,  0,  0,  1,
-     0,  1, -1,  0
-};
-
-void encoder_callback(uint gpio, uint32_t events) {
-    uint8_t clk = gpio_get(PIN_CLK);
-    uint8_t dt  = gpio_get(PIN_DT);
-
-    uint8_t current_state = (clk << 1) | dt;
-    uint8_t index = (last_state << 2) | current_state;
-
-    encoder_position += transition_table[index];
-    last_state = current_state;
-}
+static float acc = 0.0f;
 
 // MARK: - Main function -
 int main() {
     
     // MARK: - Initialisation and setup -
     
-    
     stdio_init_all();
-    sleep_ms(100);
+    
     printf("Program pico2w_LoRaComm started");
+    
+    adc_init();
+    
+    // GPIO-Pins als ADC-Eingänge konfigurieren
+    adc_gpio_init(26); // GP26 = ADC0
+    adc_gpio_init(27); // GP27 = ADC1
+    
+    gpio_init(JOYSTICK_BTN_PIN);
+    gpio_set_dir(JOYSTICK_BTN_PIN, GPIO_IN);
+    gpio_pull_up(JOYSTICK_BTN_PIN);
 
     if (cyw43_arch_init()) {
         printf("Wi-Fi init failed\n");
         return -1;
     }
-    const uint LED_PIN = CYW43_WL_GPIO_LED_PIN;
+    
     cyw43_arch_gpio_put(LED_PIN, 0);
     
     // UART Init
@@ -82,21 +106,21 @@ int main() {
     gpio_set_function(1, GPIO_FUNC_UART);
     
     // Rotary Encoder Pins Initialisieren
-    gpio_init(PIN_CLK);
-    gpio_set_dir(PIN_CLK, GPIO_IN);
-    gpio_pull_up(PIN_CLK);
-
-    gpio_init(PIN_DT);
-    gpio_set_dir(PIN_DT, GPIO_IN);
-    gpio_pull_up(PIN_DT);
-
-    gpio_init(PIN_SW);
-    gpio_set_dir(PIN_SW, GPIO_IN);
-    gpio_pull_up(PIN_SW);
-    
-    gpio_init(PIN_B);
-    gpio_set_dir(PIN_B, GPIO_IN);
-    gpio_pull_up(PIN_B);
+//    gpio_init(PIN_CLK);
+//    gpio_set_dir(PIN_CLK, GPIO_IN);
+//    gpio_pull_up(PIN_CLK);
+//
+//    gpio_init(PIN_DT);
+//    gpio_set_dir(PIN_DT, GPIO_IN);
+//    gpio_pull_up(PIN_DT);
+//
+//    gpio_init(PIN_SW);
+//    gpio_set_dir(PIN_SW, GPIO_IN);
+//    gpio_pull_up(PIN_SW);
+//    
+//    gpio_init(PIN_B);
+//    gpio_set_dir(PIN_B, GPIO_IN);
+//    gpio_pull_up(PIN_B);
 
     // I2C konfigurieren
     i2c_init(i2c0, 400000);
@@ -128,13 +152,13 @@ int main() {
     ssd1306_t* disps[2] = { &disp1, &disp2 }; // Pointer zu Displays
     
     // Anfangszustand setzen
-    last_state = (gpio_get(PIN_CLK) << 1) | gpio_get(PIN_DT);
+//    last_state = (gpio_get(PIN_CLK) << 1) | gpio_get(PIN_DT);
     
     // Interrupts auf beide Encoder-Pins
-    gpio_set_irq_enabled_with_callback(PIN_CLK, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &encoder_callback);
-    gpio_set_irq_enabled(PIN_DT, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
+//    gpio_set_irq_enabled_with_callback(PIN_CLK, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &encoder_callback);
+//    gpio_set_irq_enabled(PIN_DT, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true);
     
-    int32_t last_encoder = encoder_position;
+//    int32_t last_encoder = encoder_position;
     
     std::string buffer;
     
@@ -156,13 +180,43 @@ int main() {
     
     while (true) {
         
-        // Encoder auslesen
-        int32_t diff = encoder_position - last_encoder;
-        if (diff != 0) {
-            last_encoder = encoder_position;
-        }
+        // MARK: - INPUT
         
-        selected_char = static_cast<char>((-encoder_position/4) % 256);
+        // Encoder auslesen
+//        int32_t diff = encoder_position - last_encoder;
+//        if (diff != 0) {
+//            last_encoder = encoder_position;
+//        }
+        
+        // X-Achse lesen
+        adc_select_input(JOYSTICK_X_CHANNEL);
+        uint16_t x_raw = adc_read(); // 0–4095
+
+        // Y-Achse lesen
+        adc_select_input(JOYSTICK_Y_CHANNEL);
+        uint16_t y_raw = adc_read(); // 0–4095
+
+        // Button lesen (active LOW wegen Pull-Up)
+        bool btn_pressed = !gpio_get(JOYSTICK_BTN_PIN);
+        
+        // Optional: auf -1.0 bis +1.0 normalisieren
+        float x_norm = (x_raw / 2047.5f) - 1.0f;
+        float y_norm = (y_raw / 2047.5f) - 1.0f;
+        
+        float x = std::abs(x_norm) >= joystick_deadzone ? x_norm : 0.0f;
+        float y = std::abs(y_norm) >= joystick_deadzone ? y_norm : 0.0f;
+        
+        // MARK: - ausgewählten char bestimmen
+//        selected_char = static_cast<char>((-encoder_position/4) % 256); // TODO: change to joystick input
+//        selected_char += std::floor(x * 2);
+//        selected_char = ((selected_char + (int)std::floor(x * 2)) % 256 + 256) % 256;
+        
+        acc += x * 0.6f; // 0.3f = Geschwindigkeitsfaktor, anpassen nach Gefühl
+
+        if (std::abs(acc) >= 1.0f) {
+            selected_char = ((selected_char + (int)acc) % 256 + 256) % 256;
+            acc -= (int)acc; // Nachkommastellen behalten
+        }
         
         // MARK: - Display code (Grafik)
         ssd1306_clear(disps[0]);
@@ -196,8 +250,8 @@ int main() {
         // MARK: Ende Grafik
         
         // MARK: - Zeichen in buffer schreiben
-        if (gpio_get(PIN_SW) == 0) {
-            if (!SW_held){
+        if (gpio_get(JOYSTICK_BTN_PIN) == 0) {
+            if (!BTN_held){
                 cyw43_arch_gpio_put(LED_PIN, 1);
                 
                 if (selected_char == 128) { // 128 neues Backspace
@@ -210,14 +264,14 @@ int main() {
                     msg_buffer[cur_pos] = '\0';
                 }
                 
-                SW_held = true;
+                BTN_held = true;
             }
         } else {
             cyw43_arch_gpio_put(LED_PIN, 0);
-            SW_held = false;
+            BTN_held = false;
         }
         
-        // MARK: - Buffer senden
+//        // MARK: - Buffer senden
         if (gpio_get(PIN_B) == 0) {
             if (!B_held){
                 
@@ -249,5 +303,8 @@ int main() {
                 buffer += c;
             }
         }
+        
+        // MARK: - kleine Pause damit es auch nicht zu schnell läuft (wegen dem joystick)
+        sleep_ms(50);
     }
 }

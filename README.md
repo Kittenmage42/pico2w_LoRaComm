@@ -7,7 +7,7 @@ Dieses Projekt verwendet ein ssd1306 OLED dieplay, einen Knopf und einen Rotary 
 ## How to build / wie mache ich das jetzt auf den Pico?:
 
 [De]
-    [macOS / vermutlich auch Linux]
+    [macOS / vermutlich auch Linux (nur unter macOS getestet)]
     Um dieses Projekt zu Kompilieren: 
         cd build #(im Terminal in den build Ordner gehen)
         cmake ..
@@ -17,3 +17,6 @@ Dieses Projekt verwendet ein ssd1306 OLED dieplay, einen Knopf und einen Rotary 
     Danach können die oben genannten Schritte ausgeführt werden. 
     
     Alternativ sollte sich auch unter dem Build Ordner im Repository eine fertige Datei liegen, die bereits kompiliert wurde. (pico2w_LoRaComm.uf2)
+    
+    [Windows]
+    Bitte eine Linux (oder macOS aber das ist rechtlich schwierg) VM installieren

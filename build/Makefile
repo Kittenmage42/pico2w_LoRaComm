@@ -986,6 +986,30 @@ Users/oswin/pico/pico-sdk/src/rp2350/pico_platform/platform.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico2w_LoRaComm.dir/build.make CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2350/pico_platform/platform.c.s
 .PHONY : Users/oswin/pico/pico-sdk/src/rp2350/pico_platform/platform.c.s
 
+Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.o: Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o
+.PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.o
+
+# target to build an object file
+Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico2w_LoRaComm.dir/build.make CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o
+.PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.o
+
+Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.i: Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+.PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.i
+
+# target to preprocess a source file
+Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico2w_LoRaComm.dir/build.make CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+.PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.i
+
+Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.s: Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+.PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.s
+
+# target to generate assembly for a file
+Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico2w_LoRaComm.dir/build.make CMakeFiles/pico2w_LoRaComm.dir/Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+.PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.c.s
+
 Users/oswin/pico/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.o: Users/oswin/pico/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.c.o
 .PHONY : Users/oswin/pico/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.o
 
@@ -2547,6 +2571,9 @@ help:
 	@echo "... Users/oswin/pico/pico-sdk/src/rp2350/pico_platform/platform.o"
 	@echo "... Users/oswin/pico/pico-sdk/src/rp2350/pico_platform/platform.i"
 	@echo "... Users/oswin/pico/pico-sdk/src/rp2350/pico_platform/platform.s"
+	@echo "... Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.o"
+	@echo "... Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.i"
+	@echo "... Users/oswin/pico/pico-sdk/src/rp2_common/hardware_adc/adc.s"
 	@echo "... Users/oswin/pico/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.o"
 	@echo "... Users/oswin/pico/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.i"
 	@echo "... Users/oswin/pico/pico-sdk/src/rp2_common/hardware_boot_lock/boot_lock.s"

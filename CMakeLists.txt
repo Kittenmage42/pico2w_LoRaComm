@@ -26,6 +26,7 @@ target_link_libraries(pico2w_LoRaComm
     pico_stdlib
     hardware_i2c
     pico_cyw43_arch_none
+    hardware_adc
 )
 
 # Create map/bin/hex/uf2 files

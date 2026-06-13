@@ -174,6 +174,31 @@ void ssd1306_draw_line(ssd1306_t *p, int32_t x1, int32_t y1, int32_t x2, int32_t
     }
 }
 
+void ssd1306_draw_line_bresenham(ssd1306_t *p, int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
+    int32_t dx = abs(x2 - x1);
+    int32_t dy = -abs(y2 - y1);
+    int32_t sx = (x1 < x2) ? 1 : -1;
+    int32_t sy = (y1 < y2) ? 1 : -1;
+    int32_t err = dx + dy;
+
+    while (1) {
+        ssd1306_draw_pixel(p, x1, y1);
+
+        if (x1 == x2 && y1 == y2) break;
+
+        int32_t e2 = 2 * err;
+
+        if (e2 >= dy) {
+            err += dy;
+            x1  += sx;
+        }
+        if (e2 <= dx) {
+            err += dx;
+            y1  += sy;
+        }
+    }
+}
+
 void ssd1306_clear_square(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
     for(uint32_t i=0; i<width; ++i)
         for(uint32_t j=0; j<height; ++j)
